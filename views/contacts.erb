@@ -1,16 +1,15 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>All contacts</title>
-
-    <ul>
-      <% Contact.all.each do |contact| %>
-        <li><%= contact.first_name %> <%= contact.last_name %></li>
-      <% end %>
-    </ul>
-  </head>
-  <body>
-
-  </body>
-</html>
+<table class="table table-striped">
+  <tr>
+    <th>First name</th>
+    <th>Last name</th>
+    <th>Email</th>
+    <th>Note</th>
+  <% Contact.all.each do |contact| %>
+    <tr>
+      <td><%= contact.first_name %></td>
+      <td><%= contact.last_name %></td>
+      <td><%= contact.email %></td>
+      <td><%= contact.note %></td>
+    </tr>
+  <% end %>
+</table>
