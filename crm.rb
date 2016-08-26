@@ -26,3 +26,8 @@ post '/contacts' do
   Contact.create(params[:first_name], params[:last_name], params[:email], params[:note])
   redirect to('/contacts')
 end
+
+get '/contact/1' do
+  @contact = Contact.find(1)
+  erb :shot_contact
+end
