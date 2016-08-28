@@ -2,21 +2,15 @@
 
 <h1> Creating a new contact</h1>
 
-<form class="navbar-form navbar-left" role="search">
+<form class="navbar-form navbar-left" action='/contacts' method='post'>
   <div class="form-group">
 
     <input type='text' class="form-control" placeholder='first name' name='first_name'>
     <input type='text' class="form-control" placeholder='last name' name='last_name'>
     <input type='text' class="form-control" placeholder='email' name='email'>
     <textarea class="form-control" placeholder='note' name='note' rows='3'></textarea>
+    <a href="/contacts">
+      <input type='submit' class ="btn btn-success" value='Submit'>
+    </a>
   </div>
-  <a type="submit" href="/contacts" class="btn btn-success">Submit</a>
 </form>
-
-<div>
-  <br>
-  <br>
-  <br>
-    <a class="btn btn-primary btn-lg" href="/contacts" role="Add a Contact">All Contacts</a>
-  </br>
-</div>

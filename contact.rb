@@ -59,7 +59,7 @@ class Contact
     when "e_mail"
       Contact.find_email(attr_value)
     when "id"
-      Contact.find_id(attr_value)
+      Contact.find(attr_value)
     else
       puts "I don't know what's going on."
     end
@@ -100,13 +100,8 @@ class Contact
 
 # This method should accept an id as an argument
 # and return the contact who has that id
-  def self.find_id(id_num)
-    @@contacts.each do |x|
-      if x.id == id_num.to_i
-        x.output_contact_info
-        return x
-      end
-    end
+  def self.find(id)
+    @@contacts.find { |contact| contact.id == id }
   end
 
 # This instance method ouputs all the contact info of that instance
@@ -133,7 +128,7 @@ class Contact
   # This method should delete the contact
   # HINT: Check the Array class docs for built-in methods that might be useful here
   def delete
-    @@contacts.delete(self)
+    @@contacts.delete_if { |contact| contact.id == self.id }
   end
 
   # Feel free to add other methods here, if you need them.

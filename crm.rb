@@ -31,8 +31,8 @@ post '/contacts' do
 end
 
 get '/contacts/:id' do
-  @contact = Contact.find_id(params[:id].to_i)
-  if @contact != nil
+  @contact = Contact.find(params[:id].to_i)
+  if @contact
     erb :show_contact
   else
     raise Sinatra::NotFound
@@ -40,7 +40,7 @@ get '/contacts/:id' do
 end
 
 get '/contacts/:id/edit' do
-  @contact = Contact.find_id(params[:id].to_i)
+  @contact = Contact.find(params[:id].to_i)
   if @contact
     erb :edit_contact
   else
@@ -56,8 +56,19 @@ put '/contacts/:id' do # handles put request
     @contact.email = params[:email]
     @contact.note = params[:note]
 
-    redirect to('/contacts')
+    redirect to('/contacts/:id')
   else
     raise Sinatra::NotFound # if can't find the id, the raise notfound
+  end
+end
+
+
+delete '/contacts/:id' do
+  @contact = Contact.find(params[:id].to_i)
+  if @contact
+    @contact.delete
+    redirect to('/contacts')
+  else
+    raise Sinatra::NotFound
   end
 end
