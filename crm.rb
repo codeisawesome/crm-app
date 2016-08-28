@@ -47,3 +47,17 @@ get '/contacts/:id/edit' do
     raise Sinatra::NotFound
   end
 end
+
+put '/contacts/:id' do # handles put request
+  @contact = Contact.find(params[:id].to_i) # inside the put request, it includes the id, if we can find the id, then we can update it
+  if @contact
+    @contact.first_name = params[:first_name]
+    @contact.last_name = params[:last_name]
+    @contact.email = params[:email]
+    @contact.note = params[:note]
+
+    redirect to('/contacts')
+  else
+    raise Sinatra::NotFound # if can't find the id, the raise notfound
+  end
+end
