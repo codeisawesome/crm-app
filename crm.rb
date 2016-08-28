@@ -4,9 +4,12 @@
 require_relative 'contact'
 require 'sinatra'
 
+# Temp fake data for testing purposes
+
 Contact.create('Mark', 'Zuckerberg', 'mark@facebook.com', 'CEO')
 Contact.create('Sergey', 'Brin', 'sergey@google.com', 'Co-Founder')
 Contact.create('Steve', 'Jobs', 'steve@apple.com', 'Visionary')
+Contact.create('Johnny', 'Bravo', 'johnny@bitmakerlabs.com', 'Rockstar')
 
 get '/' do
   @time = Time.now.to_date
@@ -27,7 +30,20 @@ post '/contacts' do
   redirect to('/contacts')
 end
 
-get '/contact/1' do
-  @contact = Contact.find(1)
-  erb :shot_contact
+get '/contacts/:id' do
+  @contact = Contact.find_id(params[:id].to_i)
+  if @contact != nil
+    erb :show_contact
+  else
+    raise Sinatra::NotFound
+  end
+end
+
+get '/contacts/:id/edit' do
+  @contact = Contact.find_id(params[:id].to_i)
+  if @contact
+    erb :edit_contact
+  else
+    raise Sinatra::NotFound
+  end
 end

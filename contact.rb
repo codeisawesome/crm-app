@@ -66,13 +66,9 @@ class Contact
   end
 
 # This method returns
-  def self.find(id)
-    @@contacts.each do |contact|
-      if contact.id == id
-        return contact
-      end
-    end
-  end
+  # def self.find(id)
+  #   @@contacts.each { |contact| contact.id == id}
+  # end
 
 
 # This method return contact that has first_name
