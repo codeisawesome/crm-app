@@ -6,11 +6,6 @@ require 'sinatra'
 
 # Temp fake data for testing purposes
 
-Contact.create('Mark', 'Zuckerberg', 'mark@facebook.com', 'CEO')
-Contact.create('Sergey', 'Brin', 'sergey@google.com', 'Co-Founder')
-Contact.create('Steve', 'Jobs', 'steve@apple.com', 'Visionary')
-Contact.create('Johnny', 'Bravo', 'johnny@bitmakerlabs.com', 'Rockstar')
-
 get '/' do
   @time = Time.now.to_date
   @crm_app_name = "Rui's CRM"
@@ -25,9 +20,25 @@ get '/contacts/new' do
   erb :new_contacts
 end
 
+get '/contacts/search' do
+  @contact = Contact.find_by(params[:type] => params[:search])
+  if @contact
+    erb :show_contact
+  else
+    raise Sinatra::NotFound
+  end
+end
+
 post '/contacts' do
-  Contact.create(params[:first_name], params[:last_name], params[:email], params[:note])
+  @contact = Contact.create(
+    first_name: params[:first_name],
+    last_name:  params[:last_name],
+    email:      params[:email],
+    note:       params[:note]
+  )
   redirect to('/contacts')
+  # Contact.create(params[:first_name], params[:last_name], params[:email], params[:note])
+  # redirect to('/contacts')
 end
 
 get '/contacts/:id' do
@@ -41,34 +52,37 @@ end
 
 get '/contacts/:id/edit' do
   @contact = Contact.find(params[:id].to_i)
-  if @contact
     erb :edit_contact
-  else
-    raise Sinatra::NotFound
-  end
 end
 
 put '/contacts/:id' do # handles put request
-  @contact = Contact.find(params[:id].to_i) # inside the put request, it includes the id, if we can find the id, then we can update it
-  if @contact
-    @contact.first_name = params[:first_name]
-    @contact.last_name = params[:last_name]
-    @contact.email = params[:email]
-    @contact.note = params[:note]
+  @contact            = Contact.find(params[:id].to_i) # inside the put request, it includes the id, if we can find the id, then we can update it
+  @contact.first_name = params[:first_name]
+  @contact.last_name  = params[:last_name]
+  @contact.email      = params[:email]
+  @contact.note       = params[:note]
 
     redirect to('/contacts/:id')
-  else
-    raise Sinatra::NotFound # if can't find the id, the raise notfound
-  end
 end
 
 
 delete '/contacts/:id' do
-  @contact = Contact.find(params[:id].to_i)
+  @contact = Contact.find_by(params[:id].to_i)
   if @contact
-    @contact.delete
+    @contact.destroy
     redirect to('/contacts')
   else
     raise Sinatra::NotFound
   end
+  # @contact = Contact.find(params[:id].to_i)
+  # if @contact
+  #   @contact.delete
+  #   redirect to('/contacts')
+  # else
+  #   raise Sinatra::NotFound
+  # end
+end
+
+after do
+  ActiveRecord::Base.connection.close
 end
